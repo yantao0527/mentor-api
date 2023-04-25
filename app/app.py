@@ -1,6 +1,7 @@
 from functools import lru_cache
 from beanie import init_beanie
 from fastapi import Depends, FastAPI
+from pydantic import BaseModel
 
 from app.config import Settings
 from app.db import User, db
@@ -11,6 +12,7 @@ from app.users import (
     current_active_user,
     fastapi_users,
 )
+from ai.chatgpt import chat_improve_resume
 
 app = FastAPI()
 
@@ -68,3 +70,12 @@ async def info(settings: Settings = Depends(get_settings)):
         "app max integer": settings.APP_MAX,
     }
 
+class Resume(BaseModel):
+    resume: str
+    job: str
+
+
+@app.post("/chat/resume")
+async def improve_resume(resume: Resume):
+    result_text = chat_improve_resume(resume.resume, resume.job)
+    return {"message": result_text}
