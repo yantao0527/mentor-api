@@ -5,6 +5,9 @@ install:
 dev:
 	uvicorn app.app:app --host 0.0.0.0 --port 8000 --reload
 
+chat:
+	python ai/chatgpt.py
+
 #	  -e MONGO_INITDB_ROOT_USERNAME=admin \
 #	  -e MONGO_INITDB_ROOT_PASSWORD=mcafee123 \
 
@@ -47,3 +50,6 @@ test-me:
 	  '${API_BASE}/users/me' \
 	  -H 'accept: application/json' \
 	  -H "Authorization: Bearer ${BEARER_TOKEN}"
+
+google-client-library:
+	pip install --upgrade google-api-python-client google-auth-httplib2 google-auth-oauthlib
